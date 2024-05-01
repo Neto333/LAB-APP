@@ -1,0 +1,27 @@
+version: '3.8'
+
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: school_db
+    ports: 
+      - "3254:5432"
+    cap_add:
+      - SYS_NICE  
+  school:
+     image: domingasneto2019/school:V1
+     build:
+      context: ./
+     container_name: school
+     depends_on:
+       - postgres	
+     environment:
+       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/school_db
+     ports:
+       - "9090:8080"
